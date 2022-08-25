@@ -9,6 +9,20 @@ require './lib/queen.rb'
 
 class Board
   def initialize
+    @move_list = []
+    @active_pieces = []
+    @taken_pieces = []
+  end
+
+  def get_move(player)
+    
+  end
+
+  def checkmate?
+    
+  end
+
+  def save
     
   end
 end

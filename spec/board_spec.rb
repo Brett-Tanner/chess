@@ -4,4 +4,8 @@ require './lib/board.rb'
 
 describe Board do
   subject(:board) {described_class.new}
+
+  describe "#save" do
+    
+  end
 end
