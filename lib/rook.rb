@@ -2,10 +2,10 @@
 
 require './lib/piece.rb'
 
-class Pawn < Piece
+class Rook < Piece
   def initialize(color, position)
-    @symbol = "♙" if color == "white"
-    @symbol = "♟" if color == "black"
+    @symbol = "♖" if color == "white"
+    @symbol = "♜" if color == "black"
     @position = position
   end
 end
