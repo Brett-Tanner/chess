@@ -24,17 +24,19 @@ describe State do
 
     it {is_expected.to be_an_instance_of Hash}
 
-    it "the array is 8x8" do
+    it "is 9x9" do
       num_rows = board.length
       row_length = board[:a].length 
-      expect(num_rows).to eql(8)
-      expect(row_length).to eql(8)
+      expect(num_rows).to eql(9)
+      expect(row_length).to eql(9)
     end
   end
 
 
   describe "#print_board" do
     subject(:print_board) {described_class.new.print_board}
+
+    
   end
 
 

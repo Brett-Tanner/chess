@@ -26,23 +26,24 @@ class State
   end
 
   def create_board
-    black_back_row = [Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
+    black_back_row = ["H", Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
 
-    black_front_row = Array.new(8, Pawn.new("black"))
-    white_front_row = Array.new(8, Pawn.new("white"))
+    black_front_row = Array.new(8, Pawn.new("black")).unshift("G")
+    white_front_row = Array.new(8, Pawn.new("white")).unshift("B")
 
-    white_back_row = [Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
+    white_back_row = ["A", Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
 
     board = Hash.new
+    board[:col_nums] = Array.new(9) {|i| i unless i == 0}.unshift(" ").compact
     board[:h] = black_back_row
     board[:g] = black_front_row
-    board[:f] = Array.new(8, nil)
-    board[:e] = Array.new(8, nil)
-    board[:d] = Array.new(8, nil)
-    board[:c] = Array.new(8, nil)
+    board[:f] = Array.new(8, nil).unshift("F")
+    board[:e] = Array.new(8, nil).unshift("E")
+    board[:d] = Array.new(8, nil).unshift("D")
+    board[:c] = Array.new(8, nil).unshift("C")
     board[:b] = white_front_row
     board[:a] = white_back_row
-    
+
     board
   end
 
