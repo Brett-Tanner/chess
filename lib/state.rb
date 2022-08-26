@@ -14,7 +14,7 @@ require './lib/queen.rb'
 # has get_move method which translates letters to equiv numbers
 # rejects moves that hit a friendly space or are invalid
 
-class Board
+class State
   def initialize
     @move_list = []
     @active_pieces = []

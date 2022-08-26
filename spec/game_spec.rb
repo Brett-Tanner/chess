@@ -8,7 +8,7 @@ describe Game do
   before do
     allow(game).to receive(:puts)
     allow(game).to receive(:loop).and_yield
-    allow_any_instance_of(Board).to receive(:puts)
+    allow_any_instance_of(State).to receive(:puts)
   end
 
   describe "#play" do

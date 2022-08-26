@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require './lib/board.rb'
+require './lib/state.rb'
 require './lib/human.rb'
 require './lib/cpu.rb'
 
 class Game
 
   def play
-    board = Board.new
+    board = State.new
     white = create_player("White")
     black = create_player("Black")
 

@@ -2,8 +2,8 @@
 
 require './lib/board.rb'
 
-describe Board do
-  subject(:board) {described_class.new}
+describe State do
+  subject(:state) {described_class.new}
 
   describe "#save" do
     
