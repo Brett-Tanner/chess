@@ -3,9 +3,8 @@
 require './lib/piece.rb'
 
 class Rook < Piece
-  def initialize(color, position)
+  def initialize(color)
     @symbol = "♖" if color == "white"
     @symbol = "♜" if color == "black"
-    @position = position
   end
 end

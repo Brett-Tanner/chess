@@ -8,10 +8,6 @@
 # its location on the board (e.g. "\u265A"e5)
 
 class Piece
-  def move(start, dest)
-    
-  end
-
   def valid_move?(start, dest)
     
   end

@@ -7,21 +7,25 @@ require './lib/cpu.rb'
 class Game
 
   def play
-    board = State.new
+    state = State.new
     white = create_player("White")
     black = create_player("Black")
 
     winner = loop do
-      board.get_move(black.name)
-      break @black.name if board.checkmate?
-      board.get_move(white.name)
-      break @white.name if board.checkmate?
+      state.get_move(black.name)
+      break @black.name if state.checkmate?
+      state.get_move(white.name)
+      break @white.name if state.checkmate?
     end
     
     end_game(winner)
   end
 
   private
+
+  def load  # TODO: add this once you implement #save on State class
+    
+  end
 
   def create_player(color)
     puts "#{color} player, what's your name? Enter CPU to play against the computer"

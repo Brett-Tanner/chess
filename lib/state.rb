@@ -15,10 +15,39 @@ require './lib/queen.rb'
 # rejects moves that hit a friendly space or are invalid
 
 class State
-  def initialize
-    @move_list = []
-    @active_pieces = []
-    @taken_pieces = []
+
+  attr_accessor :board
+
+  def initialize(board = create_board(), list = [], active = [], taken = [])
+    @board = board
+    @move_list = list
+    @active_pieces = active
+    @taken_pieces = taken
+  end
+
+  def create_board
+    black_back_row = [Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
+
+    black_front_row = Array.new(8, Pawn.new("black"))
+    white_front_row = Array.new(8, Pawn.new("white"))
+
+    white_back_row = [Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
+
+    board = Hash.new
+    board[:h] = black_back_row
+    board[:g] = black_front_row
+    board[:f] = Array.new(8, nil)
+    board[:e] = Array.new(8, nil)
+    board[:d] = Array.new(8, nil)
+    board[:c] = Array.new(8, nil)
+    board[:b] = white_front_row
+    board[:a] = white_back_row
+    
+    board
+  end
+
+  def print_board
+    
   end
 
   def get_move(player)
