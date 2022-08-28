@@ -5,19 +5,10 @@ require './lib/state.rb'
 describe State do
   subject(:state) {described_class.new}
 
-  # context "When called with default arguments" do
-    
-  #   it "initializes with default arguments" do
-      
-  #   end
-  # end
-
-  # context "When called with save file info" do
-    
-  #   it "initializes with that info" do
-      
-  #   end
-  # end
+  before do
+    allow(state).to receive(:puts)
+    allow(state).to receive(:print)
+  end
 
   describe "#create_board" do
     subject(:board) {described_class.new.board}
@@ -26,17 +17,24 @@ describe State do
 
     it "is 9x9" do
       num_rows = board.length
-      row_length = board[:a].length 
+      row_length = board[0].length 
       expect(num_rows).to eql(9)
       expect(row_length).to eql(9)
     end
   end
 
-
   describe "#print_board" do
     subject(:print_board) {described_class.new.print_board}
 
-    
+      it "prints 9 lines" do
+        expect(state).to receive(:puts).exactly(9).times
+        state.print_board
+      end
+
+      it "prints 9 columns" do
+        expect(state).to receive(:print).exactly(81).times
+        state.print_board
+      end
   end
 
 

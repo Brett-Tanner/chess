@@ -8,6 +8,9 @@
 # its location on the board (e.g. "\u265A"e5)
 
 class Piece
+
+  attr_accessor :symbol
+  
   def valid_move?(start, dest)
     
   end
