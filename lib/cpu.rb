@@ -2,9 +2,10 @@
 
 class Computer
 
-  attr_accessor :name
+  attr_accessor :name, :color
   
-  def initialize
+  def initialize(color)
     @name = "CPU"
+    @color = color
   end
 end

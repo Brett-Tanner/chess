@@ -10,9 +10,9 @@ class Game
     state.create_player("Black")
 
     winner = loop do
-      state.get_move(state.black_player.name)
+      state.move(state.white_player)
       break state.black_player.name if state.checkmate?
-      state.get_move(state.white_player.name)
+      state.move(state.black_player)
       break state.white_player.name if state.checkmate?
     end
     

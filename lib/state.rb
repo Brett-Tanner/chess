@@ -9,20 +9,18 @@ require './lib/knight.rb'
 require './lib/pawn.rb'
 require './lib/queen.rb'
 
-# has updated active/taken pieces list of piece objects
-# tracks white and black players
+# has updated active pieces list of piece objects
 # keeps a list of all moves made
-# has get_move method which translates letters to equiv numbers
+# has move method
 # rejects moves that hit a friendly space or are invalid
 
 class State
 
-  attr_accessor :board, :active_pieces, :taken_pieces, :white_player, :black_player
+  attr_accessor :board, :active_pieces, :white_player, :black_player
 
-  def initialize(list = [], active = [], taken = [], board = [], white = nil, black = nil)
+  def initialize(list = [], active = [], board = [], white = nil, black = nil)
     @active_pieces = active
     @move_list = list
-    @taken_pieces = taken
     @board = board.empty? ? create_board() : board
     @white_player = white
     @black_player = black
@@ -89,16 +87,18 @@ class State
     puts "#{color} player, what's your name? Enter CPU to play against the computer"
     name = gets.chomp.capitalize
     if color == "White"
-      return @white_player = Computer.new if name === "Cpu"
-      @white_player = Human.new(name)
+      return @white_player = Computer.new("White") if name === "Cpu"
+      @white_player = Human.new(name, "White")
     else
-      return @black_player = Computer.new if name === "Cpu"
-      @black_player = Human.new(name)
+      return @black_player = Computer.new("Black") if name === "Cpu"
+      @black_player = Human.new(name, "Black")
     end
   end
 
-  def get_move(player)
-    puts "#{player}, what's your move?"
+  def move(player)
+    move = move_input(player)
+    start = move[0]
+    dest = move[1]
   end
 
   def checkmate?
@@ -125,6 +125,40 @@ class State
   
   def black(text)
     colorize(text, "\u001b[46;1m")
+  end
+
+  def move_input(player)
+    puts "#{player.name}, what's your move?"
+    input = gets.chomp.split("to").map {|coord| coord.strip}
+
+    start = [to_row(input[0][0]), input[0][1].to_i]
+    dest = [to_row(input[1][0]), input[1][1].to_i]
+
+    return [start, dest] if inbounds?(start, dest) || !friendly_fire?(start, dest)
+    move_input(player)
+  end
+
+  def inbounds?(start, def) # TODO: how to succintly check if inbounds
+    return false if start.all?
+  end
+
+  def friendly_fire?(start, dest)
+    s_row = start[0]
+    s_col = start[1]
+    player_piece = @board[s_row][s_col]
+
+    d_row = dest[0]
+    d_col = dest[1]
+    target_piece = @board[d_row][d_col]
+
+    return false if target_piece.class == String
+    return false if player_piece.color != target_piece.color
+    true
+  end
+
+  def to_row(letter)
+    rel_array = %w[A B C D E F G H]
+    rel_array.index(letter)
   end
 end
 

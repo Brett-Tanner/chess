@@ -43,6 +43,40 @@ describe State do
       end
   end
 
+  describe "#move" do
+    let(:player) (double('player', name: "Brett", color: "White"))
+    subject(:move) (described_class.new.move(player))
+
+    context "When input is out of bounds" do
+      it "displays an error message" do
+        
+      end
+
+      it "asks for new inputs" do
+        
+      end
+    end
+
+    context "When the space is occupied by friendly piece" do
+      it "displays an error message" do
+        
+      end
+
+      it "asks for new inputs" do
+        
+      end
+    end
+
+    context "When the move is illegal" do
+      it "displays an error" do
+        
+      end
+
+      it "asks for new inputs" do
+        
+      end
+    end
+  end
 
   describe "#save" do
     

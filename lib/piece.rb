@@ -9,7 +9,7 @@
 
 class Piece
 
-  attr_accessor :symbol
+  attr_accessor :symbol, :color
   
   def valid_move?(start, dest)
     
