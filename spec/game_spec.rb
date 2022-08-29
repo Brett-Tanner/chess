@@ -16,7 +16,7 @@ describe Game do
     context "When two names are given" do
 
       before do
-        allow(game).to receive(:gets).and_return("Brett", "Viktoria")
+        allow_any_instance_of(State).to receive(:gets).and_return("Brett", "Viktoria")
         allow(game).to receive(:end_game)
       end
 
@@ -31,7 +31,7 @@ describe Game do
     context "When one name is CPU" do
 
       before do
-        allow(game).to receive(:gets).and_return("Brett", "CPU")
+        allow_any_instance_of(State).to receive(:gets).and_return("Brett", "CPU")
         allow(game).to receive(:end_game)
       end
 
@@ -47,7 +47,7 @@ describe Game do
     context "When both names are CPU" do
 
       before do
-        allow(game).to receive(:gets).and_return("cpu", "CPU")
+        allow_any_instance_of(State).to receive(:gets).and_return("cpu", "CPU")
         allow(game).to receive(:end_game)
       end
 

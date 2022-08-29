@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './lib/human.rb'
+require './lib/cpu.rb'
 require './lib/bishop.rb'
 require './lib/rook.rb'
 require './lib/king.rb'
@@ -7,7 +9,7 @@ require './lib/knight.rb'
 require './lib/pawn.rb'
 require './lib/queen.rb'
 
-# has active/taken pieces list of piece objects
+# has updated active/taken pieces list of piece objects
 # tracks white and black players
 # keeps a list of all moves made
 # has get_move method which translates letters to equiv numbers
@@ -15,13 +17,15 @@ require './lib/queen.rb'
 
 class State
 
-  attr_accessor :board, :active_pieces, :taken_pieces
+  attr_accessor :board, :active_pieces, :taken_pieces, :white_player, :black_player
 
-  def initialize(list = [], active = [], taken = [])
+  def initialize(list = [], active = [], taken = [], board = [], white = nil, black = nil)
     @active_pieces = active
     @move_list = list
     @taken_pieces = taken
-    @board = create_board()
+    @board = board.empty? ? create_board() : board
+    @white_player = white
+    @black_player = black
   end
 
   def create_board
@@ -39,7 +43,7 @@ class State
 
 
     board = Hash.new
-    board[:col_nums] = Array.new(9) {|i| i unless i == 0}.unshift(" ").compact
+    board[:col_nums] = Array.new(8) {|i| i + 1}.unshift(" ")
     board[7] = black_back_row
     board[6] = black_front_row
     board[5] = Array.new(8, " ").unshift("F")
@@ -78,6 +82,18 @@ class State
       # separates rows
       puts ""
 
+    end
+  end
+
+  def create_player(color)
+    puts "#{color} player, what's your name? Enter CPU to play against the computer"
+    name = gets.chomp.capitalize
+    if color == "White"
+      return @white_player = Computer.new if name === "Cpu"
+      @white_player = Human.new(name)
+    else
+      return @black_player = Computer.new if name === "Cpu"
+      @black_player = Human.new(name)
     end
   end
 
