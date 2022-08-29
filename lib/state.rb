@@ -7,7 +7,6 @@ require './lib/knight.rb'
 require './lib/pawn.rb'
 require './lib/queen.rb'
 
-# creates itself as an 8x8 grid of alternating black/white square, with pieces in their starting positions and white at the bottom
 # has active/taken pieces list of piece objects
 # tracks white and black players
 # keeps a list of all moves made
@@ -16,22 +15,28 @@ require './lib/queen.rb'
 
 class State
 
-  attr_accessor :board
+  attr_accessor :board, :active_pieces, :taken_pieces
 
-  def initialize(board = create_board(), list = [], active = [], taken = [])
-    @board = board
-    @move_list = list
+  def initialize(list = [], active = [], taken = [])
     @active_pieces = active
+    @move_list = list
     @taken_pieces = taken
+    @board = create_board()
   end
 
   def create_board
     black_back_row = ["H", Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
+    black_back_row.each {|value| @active_pieces << value unless value == "H"}
 
     black_front_row = Array.new(8, Pawn.new("black")).unshift("G")
+    black_front_row.each {|value| @active_pieces << value unless value == "G"}
     white_front_row = Array.new(8, Pawn.new("white")).unshift("B")
+    white_front_row.each {|value| @active_pieces << value unless value == "B"}
+
 
     white_back_row = ["A", Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
+    white_back_row.each {|value| @active_pieces << value unless value == "A"}
+
 
     board = Hash.new
     board[:col_nums] = Array.new(9) {|i| i unless i == 0}.unshift(" ").compact

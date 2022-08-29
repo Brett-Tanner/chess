@@ -21,6 +21,12 @@ describe State do
       expect(num_rows).to eql(9)
       expect(row_length).to eql(9)
     end
+
+    it "adds all 32 pieces to active pieces" do
+      active = state.active_pieces
+      length = active.length
+      expect(length).to eql(32)
+    end
   end
 
   describe "#print_board" do
