@@ -99,6 +99,14 @@ class State
     move = move_input(player)
     start = move[0]
     dest = move[1]
+    player_piece = @board[start[0]][start[1]]
+    target = @board[dest[0]][dest[1]]
+
+    return move(player) if invalid_move?(player_piece, target) || player_piece.invalid_move?(start, dest)
+
+    make_move(start, dest)
+    @move_list << [start, dest]
+    @active_pieces.delete(target) if target.class != String
   end
 
   def checkmate?
@@ -134,26 +142,33 @@ class State
     start = [to_row(input[0][0]), input[0][1].to_i]
     dest = [to_row(input[1][0]), input[1][1].to_i]
 
-    return [start, dest] if inbounds?(start, dest) || !friendly_fire?(start, dest)
+    return [start, dest] if inbounds?(start, dest)
     move_input(player)
   end
 
-  def inbounds?(start, def) # TODO: how to succintly check if inbounds
-    return false if start.all?
+  def inbounds?(start, dest) # TODO: how to succintly check if inbounds
+    
   end
 
-  def friendly_fire?(start, dest)
-    s_row = start[0]
-    s_col = start[1]
-    player_piece = @board[s_row][s_col]
+  def invalid_move?(player_piece, target)
+    return true if friendly_fire?(player_piece, target)
+    # check piece's move matrix to see if it's possible
+    # check for check if piece is king
+  end
 
-    d_row = dest[0]
-    d_col = dest[1]
-    target_piece = @board[d_row][d_col]
-
-    return false if target_piece.class == String
-    return false if player_piece.color != target_piece.color
+  def friendly_fire?(player_piece, target)
+    return false if target.class == String
+    return false if player_piece.color != target.color
+    puts "**You can't take your own piece!**"
     true
+  end
+
+  def in_check? # TODO:
+    
+  end
+
+  def make_move(start, dest) # TODO:
+    
   end
 
   def to_row(letter)

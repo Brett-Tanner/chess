@@ -11,7 +11,7 @@ class Piece
 
   attr_accessor :symbol, :color
   
-  def valid_move?(start, dest)
+  def invalid_move?(start, dest)
     
   end
 end

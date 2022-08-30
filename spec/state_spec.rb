@@ -44,35 +44,69 @@ describe State do
   end
 
   describe "#move" do
-    let(:player) (double('player', name: "Brett", color: "White"))
-    subject(:move) (described_class.new.move(player))
+    let(:player) {double('player', name: "Brett", color: "White")}
+    subject(:move) {described_class.new.move(player)}
 
     context "When input is out of bounds" do
-      it "displays an error message" do
+      xit "displays an error message" do
         
       end
 
-      it "asks for new inputs" do
+      xit "asks for new inputs" do
         
       end
     end
 
     context "When the space is occupied by friendly piece" do
-      it "displays an error message" do
-        
+      xit "displays an error message" do
+        error = "**You can't take your own piece!**"
+        expect(state).to receive(:puts).with(error).once
       end
 
-      it "asks for new inputs" do
+      xit "asks for new inputs" do
         
       end
     end
 
-    context "When the move is illegal" do
-      it "displays an error" do
+    context "When the piece can't move like that" do
+
+      before do
         
       end
 
-      it "asks for new inputs" do
+      xit "displays an error" do
+        
+      end
+
+      xit "asks for new inputs" do
+        
+      end
+    end
+
+    context "When move is valid, nothing taken" do
+      xit "changes the starting space" do
+        
+      end
+
+      xit "changes the destination space" do
+        
+      end
+      
+      xit "pushes start and destination to move_list" do
+        
+      end
+
+      xit "doesn't display any errors" do
+        
+      end
+
+      xit "doesn't affect active piece list" do
+        
+      end
+    end
+
+    context "When a piece is taken" do
+      xit "removes the piece from active pieces" do
         
       end
     end
