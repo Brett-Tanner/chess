@@ -97,13 +97,18 @@ class State
 
   def move(player)
     move = move_input(player)
+
     start = move[0]
     dest = move[1]
 
     player_piece = @board[start[0]][start[1]]
     target = @board[dest[0]][dest[1]]
 
-    return move(player) if invalid_move?(player_piece, target) || player_piece.invalid_move?(start, dest)
+    return move(player) if friendly_fire?(player_piece, target)
+
+    # check?(player_piece, target) || player_piece.invalid_move?(start, dest)
+
+    # check for check if piece is king
 
     # make_move(start, dest)
     # @move_list << [start, dest]
@@ -119,6 +124,38 @@ class State
   end
 
   private
+
+  def move_input(player)
+    puts "#{player.name}, what's your move?"
+    input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
+
+    # convert rows from letters to row index
+    start = [to_row(input[0][0]), input[0][1].to_i]
+    dest = [to_row(input[1][0]), input[1][1].to_i]
+
+    return [start, dest] if inbounds?(start, dest)
+    move_input(player)
+  end
+
+  def inbounds?(start, dest)
+    return true if start.all? {|i| i >= 1 && i <= 8} && dest.all? {|i| i >= 1 && i <= 8}
+    puts "**Your coordinates are out of bounds**"
+    false
+  end
+
+  def friendly_fire?(player_piece, target)
+    return false if target.class == String || player_piece.color != target.color
+    puts "**You can't take your own piece!**"
+    true
+  end
+
+  def check? # TODO:
+    
+  end
+
+  def make_move(start, dest) # TODO:
+    
+  end
 
   def white_space?(key, index)
     (key.even? && index.even?) || (key.odd? && index.odd?)
@@ -136,47 +173,8 @@ class State
     colorize(text, "\u001b[46;1m")
   end
 
-  def move_input(player)
-    puts "#{player.name}, what's your move?"
-    input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
-
-    # convert rows from letters to row index
-    start = [to_row(input[0][0]), input[0][1].to_i]
-    dest = [to_row(input[1][0]), input[1][1].to_i]
-
-    return [start, dest] if inbounds?(start, dest)
-    move_input(player)
-  end
-
-  def inbounds?(start, dest)
-    return true if start.all? {|i| i >= 0 && i <= 7} && dest.all? {|i| i >= 1 && i <= 8}
-    puts "**Your coordinates are out of bounds**"
-    false
-  end
-
-  def invalid_move?(player_piece, target)
-    return true if friendly_fire?(player_piece, target)
-    # check piece's move matrix to see if it's possible
-    # check for check if piece is king
-  end
-
-  def friendly_fire?(player_piece, target)
-    return false if target.class == String
-    return false if player_piece.color != target.color
-    puts "**You can't take your own piece!**"
-    true
-  end
-
-  def check? # TODO:
-    
-  end
-
-  def make_move(start, dest) # TODO:
-    
-  end
-
   def to_row(letter)
-    rel_array = %w[nil A B C D E F G H]
+    rel_array = %w[nil H G F E D C B A]
     return rel_array.index(letter) if rel_array.include?(letter)
     20
   end

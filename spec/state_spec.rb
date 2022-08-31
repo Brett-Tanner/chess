@@ -65,13 +65,32 @@ describe State do
     end
 
     context "When the space is occupied by friendly piece" do
-      xit "displays an error message" do
-        error = "**You can't take your own piece!**"
-        expect(state).to receive(:puts).with(error).once
+      let(:occupied_space) {
+        double('occupied', class: "Rook", color: "White", invalid_move?: false)
+      }
+      let(:unoccupied_space) {
+        double('unoccupied', class: "Rook", color: "Black", invalid_move?: false)
+      }
+
+      subject(:occupied_state) do 
+        State.new(Array.new(8, Array.new(9, occupied_space)).push(Array.new(9, unoccupied_space)))
       end
 
-      xit "asks for new inputs" do
-        
+      before do
+        allow(occupied_state).to receive(:gets).and_return("a1 to a8", "a1 to h8")
+        allow(occupied_state).to receive(:puts)
+      end
+      
+      it "displays an error message" do
+        error = "**You can't take your own piece!**"
+        expect(occupied_state).to receive(:puts).with(error).once
+        occupied_state.move(player)
+      end
+
+      it "asks for new inputs" do
+        message = "Brett, what's your move?"
+        expect(occupied_state).to receive(:puts).with(message).twice
+        occupied_state.move(player)
       end
     end
 
