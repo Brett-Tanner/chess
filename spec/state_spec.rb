@@ -79,6 +79,7 @@ describe State do
       before do
         allow(occupied_state).to receive(:gets).and_return("a1 to a8", "a1 to h8")
         allow(occupied_state).to receive(:puts)
+        allow(occupied_state).to receive(:print_board)
       end
       
       it "displays an error message" do
@@ -110,32 +111,59 @@ describe State do
     end
 
     context "When move is valid, nothing taken" do
-      xit "changes the starting space" do
-        
+
+      before do
+        allow(state).to receive(:gets).and_return("b7 to d7")
       end
 
-      xit "changes the destination space" do
-        
+      it "changes the starting space" do
+        original_contents = state.board[2][7]
+        expect {state.move(player)}.to change {state.board[2][7]}.from(original_contents).to(" ")
+      end
+
+      it "changes the destination space" do
+        original_contents = state.board[4][7]
+        new_contents = state.board[2][7]
+        expect {state.move(player)}.to change {state.board[4][7]}.from(original_contents).to(new_contents)
       end
       
-      xit "pushes start and destination to move_list" do
-        
+      it "pushes start and destination to move_list" do
+        state.move(player)
+        last_move = state.instance_variable_get(:@move_list).last
+        move = [[2, 7], [4, 7]]
+        expect(last_move).to eq(move)
       end
 
-      xit "doesn't display any errors" do
-        
+      it "doesn't display any errors" do
+        boundary_error = "**Your coordinates are out of bounds**"
+        friendly_error = "**You can't take your own piece!**"
+        check_error = "**You can't move your king into check**"
+        expect(state).not_to receive(:puts).with(boundary_error)
+        expect(state).not_to receive(:puts).with(friendly_error)
+        expect(state).not_to receive(:puts).with(check_error)
       end
 
-      xit "doesn't affect active piece list" do
-        
+      it "doesn't affect active piece list" do
+        expect {state.move(player)}.not_to change {state.active_pieces}
       end
     end
 
     context "When a piece is taken" do
-      xit "removes the piece from active pieces" do
-        
+
+      before do
+        allow(state).to receive(:gets).and_return("b7 to d7", "d7 to e7", "e7 to f7", "f7 to g7")
+      end
+
+      it "removes the piece from active pieces" do
+        target = state.board[7][7]
+        4.times {state.move(player)}
+        expect(state.active_pieces).not_to include(target)
       end
     end
+  end
+
+  describe "#checkmate?" do
+    
   end
 
   describe "#save" do

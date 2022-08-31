@@ -106,13 +106,14 @@ class State
 
     return move(player) if friendly_fire?(player_piece, target)
 
+    # TODO:
     # check?(player_piece, target) || player_piece.invalid_move?(start, dest)
 
     # check for check if piece is king
 
-    # make_move(start, dest)
-    # @move_list << [start, dest]
-    # @active_pieces.delete(target) if target.class != String
+    make_move(start, dest)
+
+    @move_list << [start, dest]
   end
 
   def checkmate?
@@ -150,11 +151,16 @@ class State
   end
 
   def check? # TODO:
-    
+    puts "**You can't move your king into check**"
   end
 
   def make_move(start, dest) # TODO:
-    
+    piece = @board[start[0]][start[1]]
+    target = @board[dest[0]][dest[1]]
+
+    @active_pieces.delete(target)
+    @board[dest[0]][dest[1]] = piece
+    @board[start[0]][start[1]] = " "
   end
 
   def white_space?(key, index)
@@ -174,7 +180,7 @@ class State
   end
 
   def to_row(letter)
-    rel_array = %w[nil H G F E D C B A]
+    rel_array = %w[nil A B C D E F G H]
     return rel_array.index(letter) if rel_array.include?(letter)
     20
   end
