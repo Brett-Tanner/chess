@@ -17,7 +17,7 @@ describe State do
 
     it "is 9x9" do
       num_rows = board.length
-      row_length = board[0].length 
+      row_length = board[1].length 
       expect(num_rows).to eql(9)
       expect(row_length).to eql(9)
     end
@@ -30,7 +30,6 @@ describe State do
   end
 
   describe "#print_board" do
-    subject(:print_board) {described_class.new.print_board}
 
       it "prints 9 lines" do
         expect(state).to receive(:puts).exactly(9).times
@@ -45,15 +44,23 @@ describe State do
 
   describe "#move" do
     let(:player) {double('player', name: "Brett", color: "White")}
-    subject(:move) {described_class.new.move(player)}
 
     context "When input is out of bounds" do
-      xit "displays an error message" do
-        
+
+      before do
+        allow(state).to receive(:gets).and_return("a9 to b9", "a1 to h8")  
       end
 
-      xit "asks for new inputs" do
-        
+      it "displays an error message" do
+        error = "**Your coordinates are out of bounds**"
+        expect(state).to receive(:puts).with(error).once
+        state.move(player)
+      end
+
+      it "asks for new inputs" do
+        message = "Brett, what's your move?"
+        expect(state).to receive(:puts).with(message).twice
+        state.move(player)
       end
     end
 

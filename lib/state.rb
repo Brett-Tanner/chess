@@ -18,7 +18,7 @@ class State
 
   attr_accessor :board, :active_pieces, :white_player, :black_player
 
-  def initialize(list = [], active = [], board = [], white = nil, black = nil)
+  def initialize(board = [], list = [], active = [], white = nil, black = nil)
     @active_pieces = active
     @move_list = list
     @board = board.empty? ? create_board() : board
@@ -42,14 +42,14 @@ class State
 
     board = Hash.new
     board[:col_nums] = Array.new(8) {|i| i + 1}.unshift(" ")
-    board[7] = black_back_row
-    board[6] = black_front_row
-    board[5] = Array.new(8, " ").unshift("F")
-    board[4] = Array.new(8, " ").unshift("E")
-    board[3] = Array.new(8, " ").unshift("D")
-    board[2] = Array.new(8, " ").unshift("C")
-    board[1] = white_front_row
-    board[0] = white_back_row
+    board[8] = black_back_row
+    board[7] = black_front_row
+    board[6] = Array.new(8, " ").unshift("F")
+    board[5] = Array.new(8, " ").unshift("E")
+    board[4] = Array.new(8, " ").unshift("D")
+    board[3] = Array.new(8, " ").unshift("C")
+    board[2] = white_front_row
+    board[1] = white_back_row
 
     board
   end
@@ -99,14 +99,15 @@ class State
     move = move_input(player)
     start = move[0]
     dest = move[1]
+
     player_piece = @board[start[0]][start[1]]
     target = @board[dest[0]][dest[1]]
 
     return move(player) if invalid_move?(player_piece, target) || player_piece.invalid_move?(start, dest)
 
-    make_move(start, dest)
-    @move_list << [start, dest]
-    @active_pieces.delete(target) if target.class != String
+    # make_move(start, dest)
+    # @move_list << [start, dest]
+    # @active_pieces.delete(target) if target.class != String
   end
 
   def checkmate?
@@ -137,8 +138,9 @@ class State
 
   def move_input(player)
     puts "#{player.name}, what's your move?"
-    input = gets.chomp.split("to").map {|coord| coord.strip}
+    input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
 
+    # convert rows from letters to row index
     start = [to_row(input[0][0]), input[0][1].to_i]
     dest = [to_row(input[1][0]), input[1][1].to_i]
 
@@ -146,8 +148,10 @@ class State
     move_input(player)
   end
 
-  def inbounds?(start, dest) # TODO: how to succintly check if inbounds
-    
+  def inbounds?(start, dest)
+    return true if start.all? {|i| i >= 0 && i <= 7} && dest.all? {|i| i >= 1 && i <= 8}
+    puts "**Your coordinates are out of bounds**"
+    false
   end
 
   def invalid_move?(player_piece, target)
@@ -163,7 +167,7 @@ class State
     true
   end
 
-  def in_check? # TODO:
+  def check? # TODO:
     
   end
 
@@ -172,8 +176,9 @@ class State
   end
 
   def to_row(letter)
-    rel_array = %w[A B C D E F G H]
-    rel_array.index(letter)
+    rel_array = %w[nil A B C D E F G H]
+    return rel_array.index(letter) if rel_array.include?(letter)
+    20
   end
 end
 
