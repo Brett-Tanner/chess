@@ -21,12 +21,6 @@ describe State do
       expect(num_rows).to eql(9)
       expect(row_length).to eql(9)
     end
-
-    it "adds all 32 pieces to active pieces" do
-      active = state.active_pieces
-      length = active.length
-      expect(length).to eql(32)
-    end
   end
 
   describe "#print_board" do
@@ -142,23 +136,6 @@ describe State do
         expect(state).not_to receive(:puts).with(friendly_error)
         expect(state).not_to receive(:puts).with(check_error)
       end
-
-      it "doesn't affect active piece list" do
-        expect {state.move(player)}.not_to change {state.active_pieces}
-      end
-    end
-
-    context "When a piece is taken" do
-
-      before do
-        allow(state).to receive(:gets).and_return("b7 to d7", "d7 to e7", "e7 to f7", "f7 to g7")
-      end
-
-      it "removes the piece from active pieces" do
-        target = state.board[7][7]
-        4.times {state.move(player)}
-        expect(state.active_pieces).not_to include(target)
-      end
     end
   end
 
@@ -167,6 +144,17 @@ describe State do
   end
 
   describe "#save" do
-    
+    let(:p1) {double("p1", name: "Brett")}
+    let(:p2) {double("p2", name: "Viktoria")}
+    let(:filename) {"./data/Brett_vs_Viktoria.yaml"}
+
+    subject(:state_save) {State.new(["I'm a board!"], ["I'm a move list!"], p1, p2)}
+
+    it "creates a .yaml file using player names" do
+      state_save.save
+      exists = File.exist?(filename)
+      expect(exists).to be true
+      File.delete(filename)
+    end
   end
 end

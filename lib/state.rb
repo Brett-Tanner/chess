@@ -9,17 +9,13 @@ require './lib/knight.rb'
 require './lib/pawn.rb'
 require './lib/queen.rb'
 
-# has updated active pieces list of piece objects
-# keeps a list of all moves made
-# has move method
-# rejects moves that hit a friendly space or are invalid
+require 'yaml'
 
 class State
 
-  attr_accessor :board, :active_pieces, :white_player, :black_player
+  attr_accessor :board, :white_player, :black_player
 
-  def initialize(board = [], list = [], active = [], white = nil, black = nil)
-    @active_pieces = active
+  def initialize(board = [], list = [], white = nil, black = nil)
     @move_list = list
     @board = board.empty? ? create_board() : board
     @white_player = white
@@ -28,16 +24,12 @@ class State
 
   def create_board
     black_back_row = ["H", Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
-    black_back_row.each {|value| @active_pieces << value unless value == "H"}
 
     black_front_row = Array.new(8, Pawn.new("black")).unshift("G")
-    black_front_row.each {|value| @active_pieces << value unless value == "G"}
     white_front_row = Array.new(8, Pawn.new("white")).unshift("B")
-    white_front_row.each {|value| @active_pieces << value unless value == "B"}
 
 
     white_back_row = ["A", Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
-    white_back_row.each {|value| @active_pieces << value unless value == "A"}
 
 
     board = Hash.new
@@ -121,7 +113,15 @@ class State
   end
 
   def save
-    
+    filename = "./data/#{@white_player.name}_vs_#{@black_player.name}.yaml"
+    save_state = YAML.dump ({
+      :move_list => @move_list,
+      :board => @board,
+      :white_player => @white_player,
+      :black_player => @black_player,
+    })
+    save_file = File.open(filename, "w")
+    save_file.puts "#{save_state}"
   end
 
   private
@@ -158,7 +158,6 @@ class State
     piece = @board[start[0]][start[1]]
     target = @board[dest[0]][dest[1]]
 
-    @active_pieces.delete(target)
     @board[dest[0]][dest[1]] = piece
     @board[start[0]][start[1]] = " "
   end
