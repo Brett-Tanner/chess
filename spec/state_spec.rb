@@ -67,7 +67,7 @@ describe State do
       }
 
       subject(:occupied_state) do 
-        State.new(Array.new(8, Array.new(9, occupied_space)).push(Array.new(9, unoccupied_space)))
+        described_class.new(Array.new(8, Array.new(9, occupied_space)).push(Array.new(9, unoccupied_space)))
       end
 
       before do
@@ -148,7 +148,7 @@ describe State do
     let(:p2) {double("p2", name: "Viktoria")}
     let(:filename) {"./data/Brett_vs_Viktoria.yaml"}
 
-    subject(:state_save) {State.new(["I'm a board!"], ["I'm a move list!"], p1, p2)}
+    subject(:state_save) {described_class.new(["I'm a board!"], ["I'm a move list!"], p1, p2)}
 
     it "creates a .yaml file using player names" do
       state_save.save
