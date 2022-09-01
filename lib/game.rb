@@ -22,7 +22,9 @@ class Game
   private
 
   def load  # TODO: add this once you implement #save on State class
-    
+    # need to search data for all files with *.yaml, return a list and ask which to load
+
+    # then initialize a new state with data from that
   end
 
   def end_game(winner)
