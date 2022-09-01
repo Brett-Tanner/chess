@@ -5,10 +5,14 @@ require './lib/state.rb'
 class Game
 
   def play
-    state = State.new
-    state.create_player("White")
-    state.create_player("Black")
-
+    if File.exist?("./data/*.yaml")
+      state = from_yaml()
+    else
+      state = State.new
+      state.create_player("White")
+      state.create_player("Black")
+    end
+    
     winner = loop do
       state.move(state.white_player)
       break state.black_player.name if state.checkmate?
@@ -19,13 +23,17 @@ class Game
     end_game(winner)
   end
 
-  private
-
-  def load  # TODO: add this once you implement #save on State class
+  def from_yaml  # TODO:
     # need to search data for all files with *.yaml, return a list and ask which to load
+    save_list = Dir["./data/*.yaml"]
+    puts "Do you want to load a saved game?"
+    save_list.each {|file| puts "#{file.path}"}
+    # then initialize a new state with data from that, and return it
 
-    # then initialize a new state with data from that
+    # state
   end
+
+  private
 
   def end_game(winner)
     puts "Congrats #{winner}, you win!"
