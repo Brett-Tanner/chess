@@ -24,15 +24,14 @@ class Game
     end_game(winner)
   end
 
-  def from_yaml  # FIXME: the yaml file loads perfectly if you let the first test load it, but for the subsequent tests which actually need to load it the file seems to be empty. Reading it returns an empty string, and load_file returns nil. 
-  # Puts test briefly passed while I was messing around with the save_path input, shouldn't it pass and exit before the current error?
+  def from_yaml
     save_list = Dir["./data/*.yaml"]
     return nil if save_list.empty?
 
     puts "Enter to skip, or type the game you want to load"
     save_list.each {|file| puts file.delete_prefix("./data/").delete_suffix(".yaml")}
-    save_path = gets.chomp.prepend("./data/").concat(".yaml")
-    return nil if !save_list.include?(save_path)
+    save_path = "./data/#{gets.chomp}.yaml"
+    return nil unless save_list.include?(save_path)
 
     create_state(save_path)
   end
@@ -58,8 +57,11 @@ class Game
     end
   end
 
-  def create_state(save_path)
+  def create_state(save_path) #FIXME: deleting the save causes issues with subsequent tests
     saved_state = YAML.load_file(save_path)
+    
+    p File.exist?(save_path)
+    p saved_state
 
     board = saved_state[:board]
     list = saved_state[:move_list]

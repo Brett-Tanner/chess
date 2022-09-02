@@ -22,16 +22,16 @@ describe Game do
     end
 
     context "When 1 or more saves" do
-      
 
-      before do
+      # FIXME: these only pass if the files are already present when tests start
+      
+      before :each do
         allow(game).to receive(:gets).and_return('test_v_Brett')
 
-        # FIXME: something in this block causes the problem, but still no idea what
-        # test1 = File.new(path1, 'w')
-        # test1.puts "#{save_state}"
-        # test2 = File.new(path2, 'w')
-        # test2.puts "#{save_state}"
+        test1 = File.new(path1, 'w') unless File.exist?(path1)
+        test1.puts save_state unless test1 == nil
+        test2 = File.new(path2, 'w') unless File.exist?(path2)
+        test2.puts save_state unless test2 == nil
       end
 
       it "returns a State object" do
@@ -43,14 +43,10 @@ describe Game do
         expect(game).to receive(:puts).exactly(3).times
         game.from_yaml
       end
-
-      # after do
-      #   File.delete(path1) if File.exist?(path1)
-      #   File.delete(path2) if File.exist?(path2)
-      # end
     end
 
     context "When no save file" do
+
       it "returns nil" do
         return_value = game.from_yaml
         expect(return_value).to be nil
