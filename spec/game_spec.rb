@@ -1,54 +1,60 @@
 # frozen_string_literal: true
 
 require './lib/game.rb'
+require 'yaml'
 
 describe Game do
   subject(:game) {described_class.new}
 
-  before do
-    allow_any_instance_of(State).to receive(:move)
-    allow_any_instance_of(State).to receive(:checkmate?).and_return(true)
-    allow(game).to receive(:loop).and_yield
-    allow(game).to receive(:end_game)
-  end
-
   describe "#from_yaml" do
 
-    context "When no save file" do
-      it "doesn't ask to load" do
-        message = "Do you want to load a saved game?"
-        expect(game).not_to receive(:puts).with(message)
-        game.from_yaml
-      end
+    let(:path1) {'./data/test_v_test.yaml'}      
+    let(:path2) {'./data/test_v_Brett.yaml'}
+    let(:save_state) {YAML.dump ({
+      :board => "I'm a board",
+      :move_list => "I'm a list",
+      :white_player => "I'm a player",
+      :black_player => "I'm another player"
+    })}
+    
+    before do
+      allow(game).to receive(:puts)
     end
 
     context "When 1 or more saves" do
-
-      # you should create the testfile/s here, duh
       
-      it "asks which you want to load" do
-        message = "Do you want to load a saved game?"
-        expect(game).to receive(:puts).with(message)
-        game.from_yaml
-      end
 
-      it "creates a State from that file" do
-        board = "I'm a board!"
-        move_list = "I'm a move list!"
-        white_player = # no idea how to read it
-        black_player = # no idea how to read it
-        expect(State).to receive(:new).with(board, move_list, white_player, black_player)
-        game.from_yaml
+      before do
+        allow(game).to receive(:gets).and_return('test_v_Brett')
+
+        # FIXME: something in this block causes the problem, but still no idea what
+        # test1 = File.new(path1, 'w')
+        # test1.puts "#{save_state}"
+        # test2 = File.new(path2, 'w')
+        # test2.puts "#{save_state}"
       end
 
       it "returns a State object" do
         return_value = game.from_yaml
         expect(return_value).to be_an_instance_of State
       end
+      
+      it "displays a list of saves to choose from" do
+        expect(game).to receive(:puts).exactly(3).times
+        game.from_yaml
+      end
+
+      # after do
+      #   File.delete(path1) if File.exist?(path1)
+      #   File.delete(path2) if File.exist?(path2)
+      # end
     end
 
-    after do
-      # and delete the test file/s here
+    context "When no save file" do
+      it "returns nil" do
+        return_value = game.from_yaml
+        expect(return_value).to be nil
+      end
     end
   end
 end
