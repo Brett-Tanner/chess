@@ -99,7 +99,7 @@ class State
     return move(player) if friendly_fire?(player_piece, target)
 
     # TODO:
-    # check?(player_piece, target) || player_piece.invalid_move?(start, dest)
+    # check?(player_piece, target) || player_piece.legal?(start, dest)
 
     # check for check if piece is king
 
