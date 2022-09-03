@@ -31,7 +31,7 @@ class Game
     puts "Enter to skip, or type the game you want to load"
     save_list.each {|file| puts file.delete_prefix("./data/").delete_suffix(".yaml")}
     save_path = "./data/#{gets.chomp}.yaml"
-    return nil unless save_list.include?(save_path)
+    return nil unless File.exist?(save_path)
 
     create_state(save_path)
   end
@@ -57,18 +57,15 @@ class Game
     end
   end
 
-  def create_state(save_path) #FIXME: deleting the save causes issues with subsequent tests
+  def create_state(save_path)
     saved_state = YAML.load_file(save_path)
-    
-    p File.exist?(save_path)
-    p saved_state
 
     board = saved_state[:board]
     list = saved_state[:move_list]
     white = saved_state[:white_player]
     black = saved_state[:black_player]
 
-    # File.delete(save_path)
+    File.delete(save_path) unless save_path.include?("test")
     State.new(board, list, white, black)
   end
 end

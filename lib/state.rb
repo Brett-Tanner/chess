@@ -13,7 +13,7 @@ require 'yaml'
 
 class State
 
-  attr_accessor :board, :white_player, :black_player
+  attr_accessor :board, :white_player, :black_player, :move_list
 
   def initialize(board = [], list = [], white = nil, black = nil)
     @move_list = list
@@ -152,6 +152,10 @@ class State
 
   def check? # TODO:
     puts "**You can't move your king into check**"
+  end
+
+  def blocked?
+    
   end
 
   def make_move(start, dest) # TODO:
