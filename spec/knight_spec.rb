@@ -5,7 +5,7 @@ require './lib/knight.rb'
 describe Knight do
   subject(:knight) {described_class.new}
 
-  describe "#legal" do
+  describe "#legal?" do
     context "When the move is legal" do
       it "returns true" do
         
