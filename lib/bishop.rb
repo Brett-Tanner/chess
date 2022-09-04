@@ -10,10 +10,6 @@ class Bishop < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
-  def legal?(start, dest)
-    
-  end
-
   private
 
   def create_list

@@ -101,7 +101,7 @@ class State
     # TODO:
     # check?(player_piece, target) || player_piece.legal?(start, dest)
     # check for path being blocked unless it's a knight
-    # check for check if piece is king
+    # check for check, even if piece isn't king you need to know if it'll be in check
 
     make_move(start, dest)
 

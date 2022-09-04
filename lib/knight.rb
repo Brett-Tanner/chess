@@ -11,26 +11,22 @@ class Knight < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
-  def legal?(start, dest)
-    
-  end
-
   private
 
   def create_list
     list = Hash.new
     valid_coord = Array.new(9) {|i| i}
-    knight_offsets = knight_offsets()
+    offsets = knight_offsets()
     valid_coord.repeated_permutation(2) {|permutation| list[permutation] = nil}
     list.each do |k, v| 
       next if k[0] < 1 || k[0] > 8 || k[1] < 1 || k[1] > 8
-      list[k] = valid_moves(k, knight_offsets)
+      list[k] = valid_moves(k, offsets)
     end
     list.compact
   end
 
-  def valid_moves(start, knight_offsets)
-    valid_ends = knight_offsets.map do |offset|
+  def valid_moves(start, offsets)
+    valid_ends = offsets.map do |offset|
         row = start[0] + offset[0]
         col = start[1] + offset[1] 
         next if row < 1 || row > 8 || col < 1 || col > 8
@@ -40,9 +36,9 @@ class Knight < Piece
   end
 
   def knight_offsets
-      row_moves = [-1, 1]
-      col_moves = [-2, 2]
-      valid_moves = row_moves.product(col_moves).concat(col_moves.product(row_moves))
+    row_moves = [-1, 1]
+    col_moves = [-2, 2]
+    valid_moves = row_moves.product(col_moves).concat(col_moves.product(row_moves))
   end
 
   POSSIBLE_MOVES = {
