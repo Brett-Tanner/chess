@@ -9,7 +9,7 @@ class Piece
 
   attr_accessor :symbol, :color
   
-  def legal?(start, dest)
+  def legal?(start, dest, board)
     
   end
 end

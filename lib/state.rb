@@ -99,9 +99,10 @@ class State
     return move(player) if friendly_fire?(player_piece, target)
 
     # TODO:
-    # check?(player_piece, target) || player_piece.legal?(start, dest)
+    # check?(player_piece, target)
     # check for path being blocked unless it's a knight
     # check for check, even if piece isn't king you need to know if it'll be in check
+    # player_piece.legal?(start, dest, board) TODO: make this the last check so the pawn can safely prune its moves if it returns true
 
     make_move(start, dest)
 
@@ -158,7 +159,11 @@ class State
     
   end
 
-  def make_move(start, dest) # TODO:
+  def promote(piece)
+    
+  end
+
+  def make_move(start, dest)
     piece = @board[start[0]][start[1]]
     target = @board[dest[0]][dest[1]]
 
