@@ -24,8 +24,8 @@ class Bishop < Piece
     list.compact
   end
 
-  def valid_moves(start, bishop_offsets)
-    valid_ends = bishop_offsets.map do |offset|
+  def valid_moves(start, offsets)
+    valid_ends = offsets.map do |offset|
         row = start[0] + offset[0]
         col = start[1] + offset[1] 
         next if row < 1 || row > 8 || col < 1 || col > 8
