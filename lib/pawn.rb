@@ -16,6 +16,7 @@ class Pawn < Piece
     d_col = dest[1]
     # immediately return true if it's moving one forward from anywhere or two forward from starting position 
     return true if standard_move?(s_row, s_col, d_row, d_col) || opening_move?(s_row, s_col, d_row, d_col)
+    # check if there's an enemy piece to take, otherwise return false
     return true if valid_diag?(s_row, s_col, d_row, d_col, board)
     puts "**A pawn can't move like that!**"
     false
@@ -37,7 +38,7 @@ class Pawn < Piece
     valid_squares = [[s_row + 1, s_col + 1], [s_row + 1, s_col - 1]] if @color == "white"
     valid_squares = [[s_row - 1, s_col + 1], [s_row - 1, s_col - 1]] if @color == "black"
     return false unless valid_squares.include?([d_row, d_col])
-    return false if board[d_row, d_col] == " " || board[d_row, d_col].color == @color
+    return false if board[d_row][d_col] == " " || board[d_row][d_col].color == @color
     return true
   end
 end
