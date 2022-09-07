@@ -194,6 +194,3 @@ class State
     20
   end
 end
-
-test = State.new
-test.print_board
