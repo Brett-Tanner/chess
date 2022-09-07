@@ -11,6 +11,10 @@ class Knight < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
+  def blocked?(start, dest, board)
+    false
+  end
+
   private
 
   def create_list
