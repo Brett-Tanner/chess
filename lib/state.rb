@@ -102,6 +102,7 @@ class State
     # check?(player_piece, target)
     # check for path being blocked unless it's a knight
     # check for check, even if piece isn't king you need to know if it'll be in check
+      # So put it as a State method and call it for every move
     # player_piece.legal?(start, dest, board) TODO: make this the last check so the pawn can safely prune its moves if it returns true
 
     make_move(start, dest)
