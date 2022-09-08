@@ -93,4 +93,8 @@ describe Knight do
       end
     end
   end
+
+  describe "#clear_path?" do
+    it {is_expected.to be true}
+  end
 end

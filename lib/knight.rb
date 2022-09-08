@@ -11,8 +11,8 @@ class Knight < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
-  def blocked?(start, dest, board)
-    false
+  def clear_path?(start, dest, board)
+    true
   end
 
   private
