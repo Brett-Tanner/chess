@@ -144,4 +144,53 @@ describe Pawn do
       end
     end
   end
+
+  describe "#clear_path?" do
+    let(:board) {
+      board = Hash.new
+      (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+      board[5][4] = double('white_piece', color: "white")
+      board[3][3] = double('white_piece', color: "white")
+      board
+    }
+
+    context "When path is clear" do
+      it "moves one space forward" do
+        start = [4, 4]
+        dest = [3, 4]
+        clear = b_pawn.clear_path?(start, dest, board)
+        expect(clear).to be true
+      end
+
+      it "moves two spaces forward" do
+        start = [4, 4]
+        dest = [2, 4]
+        clear = b_pawn.clear_path?(start, dest, board)
+        expect(clear).to be true
+      end
+    end
+
+    context "When path is blocked" do
+      it "can take diagonally" do
+        start = [4, 4]
+        dest = [3, 3]
+        clear = w_pawn.clear_path?(start, dest, board)
+        expect(clear).to be true
+      end
+
+      it "can't move one space forward" do
+        start = [4, 4]
+        dest = [5, 4]
+        clear = w_pawn.clear_path?(start, dest, board)
+        expect(clear).to be false
+      end
+
+      it "can't move two spaces forward" do
+        start = [4, 4]
+        dest = [6, 4]
+        clear = w_pawn.clear_path?(start, dest, board)
+        expect(clear).to be false
+      end
+    end
+  end
 end

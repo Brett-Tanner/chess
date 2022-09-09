@@ -22,6 +22,26 @@ class Pawn < Piece
     false
   end
 
+  def clear_path?(start, dest, board)
+    row_diff = dest[0] - start[0]
+    col_diff = dest[1] - start[1]
+    return true if row_diff == col_diff
+    case row_diff
+    when 1
+      return true unless board[start[0] + 1][start[0]] != " "
+    when 2
+      return true unless board[start[0] + 1][start[0]] != " " || board[start[0] + 2][start[0]] != " "
+    when -1
+      return true unless board[start[0] - 1][start[0]] != " "
+    when -2
+      return true unless board[start[0] - 1][start[0]] != " " || board[start[0] - 2][start[0]] != " "
+    else
+      puts "That's not a valid move for a Pawn"
+    end
+    puts "There's a piece blocking your Pawn"
+    false
+  end
+
   private
 
   def standard_move?(s_row, s_col, d_row, d_col)
