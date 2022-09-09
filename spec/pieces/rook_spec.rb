@@ -3,7 +3,7 @@
 require './lib/rook.rb'
 
 describe Rook do
-  subject(:rook) {described_class.new("white")}
+  subject(:rook) {described_class.new("White")}
 
   before do
     allow(rook).to receive(:puts)
@@ -56,10 +56,10 @@ describe Rook do
     let(:board) {
       board = Hash.new
       (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
-      board[4][3] = double('white_piece', color: "white")
-      board[3][3] = double('white_piece', color: "white")
-      board[5][3] = double('white_piece', color: "white")
-      board[5][4] = double('white_piece', color: "white")
+      board[4][3] = double('white_piece', color: "White")
+      board[3][3] = double('white_piece', color: "White")
+      board[5][3] = double('white_piece', color: "White")
+      board[5][4] = double('white_piece', color: "White")
       board
     }
 

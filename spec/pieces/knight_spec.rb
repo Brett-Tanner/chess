@@ -3,7 +3,7 @@
 require './lib/knight.rb'
 
 describe Knight do
-  subject(:knight) {described_class.new("white")}
+  subject(:knight) {described_class.new("White")}
 
   describe "#legal?" do
     let(:board) {Array.new}
@@ -95,6 +95,8 @@ describe Knight do
   end
 
   describe "#clear_path?" do
+    subject(:knight_clear) {Knight.new("White").clear_path?(0, 0, 0, "")}
+
     it {is_expected.to be true}
   end
 end

@@ -3,7 +3,7 @@
 require './lib/queen.rb'
 
 describe Queen do
-  subject(:queen) {described_class.new("black")}
+  subject(:queen) {described_class.new("Black")}
 
   before do
     allow(queen).to receive(:puts)

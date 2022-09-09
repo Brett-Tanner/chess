@@ -3,7 +3,7 @@
 require './lib/king.rb'
 
 describe King do
-  subject(:king) {described_class.new("black")}
+  subject(:king) {described_class.new("Black")}
 
   before do
     allow(king).to receive(:puts)

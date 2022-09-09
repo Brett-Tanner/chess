@@ -11,7 +11,7 @@ class Knight < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
-  def clear_path?(start, dest, board)
+  def clear_path?(start, dest, board, display = "n")
     true
   end
 

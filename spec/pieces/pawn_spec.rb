@@ -3,8 +3,8 @@
 require './lib/pawn.rb'
 
 describe Pawn do
-  subject(:b_pawn) {described_class.new("black")}
-  subject(:w_pawn) {described_class.new("white")}
+  subject(:b_pawn) {described_class.new("Black")}
+  subject(:w_pawn) {described_class.new("White")}
 
   before :each do
     allow(b_pawn).to receive(:puts)
@@ -87,9 +87,9 @@ describe Pawn do
     context "When pawn tries to move diagonally" do
 
       let(:board) {
-        black_top = Array.new(3) {Array.new(9, double('black_piece', color: "black"))}
+        black_top = Array.new(3) {Array.new(9, double('black_piece', color: "Black"))}
         empty_mid = Array.new(3) {Array.new(9, " ")}
-        white_bot = Array.new(3) {Array.new(9, double('white_piece', color: "white"))}
+        white_bot = Array.new(3) {Array.new(9, double('white_piece', color: "White"))}
         black_top.concat(empty_mid).concat(white_bot)
       }
       
@@ -149,8 +149,8 @@ describe Pawn do
     let(:board) {
       board = Hash.new
       (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
-      board[5][4] = double('white_piece', color: "white")
-      board[3][3] = double('white_piece', color: "white")
+      board[5][4] = double('white_piece', color: "White")
+      board[3][3] = double('white_piece', color: "White")
       board
     }
 
