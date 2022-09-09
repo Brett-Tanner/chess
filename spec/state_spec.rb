@@ -37,24 +37,25 @@ describe State do
   end
 
   describe "#move" do
-    let(:player) {double('player', name: "Brett", color: "White")}
+    let(:w_player) {double('player', name: "Brett", color: "White")}
+    let(:b_player) {double('b_player', name: "Viktoria", color: "Black")}
 
     context "When input is out of bounds" do
 
       before do
-        allow(state).to receive(:gets).and_return("a9 to b9", "a1 to h8")  
+        allow(state).to receive(:gets).and_return("a9 to b9", "b2 to d2")  
       end
 
       it "displays an error message" do
         error = "**Your coordinates are out of bounds**"
         expect(state).to receive(:puts).with(error).once
-        state.move(player)
+        state.move(w_player)
       end
 
       it "asks for new inputs" do
         message = "Brett, what's your move?"
         expect(state).to receive(:puts).with(message).twice
-        state.move(player)
+        state.move(w_player)
       end
     end
 
@@ -72,25 +73,53 @@ describe State do
 
       before do
         allow(occupied_state).to receive(:gets).and_return("a1 to a8", "a1 to h8")
-        allow(occupied_state).to receive(:puts)
-        allow(occupied_state).to receive(:print_board)
       end
       
-      it "displays an error message" do
+      xit "displays an error" do
         error = "**You can't take your own piece!**"
         expect(occupied_state).to receive(:puts).with(error).once
-        occupied_state.move(player)
+        occupied_state.move(w_player)
       end
 
-      it "asks for new inputs" do
+      xit "asks for new inputs" do
         message = "Brett, what's your move?"
         expect(occupied_state).to receive(:puts).with(message).twice
-        occupied_state.move(player)
+        occupied_state.move(w_player)
+      end
+    end
+
+    context "When the player's King is in check" do
+      
+      before do
+        
+      end
+
+      xit "displays an error" do
+        
+      end
+
+      xit "asks for new inputs" do
+        
       end
     end
 
     context "When the piece can't move like that" do
 
+      before do
+        
+      end
+
+      xit "displays an error" do
+        
+      end
+
+      xit "asks for new inputs" do
+        
+      end
+    end
+
+    context "When there are other pieces blocking the path" do
+      
       before do
         
       end
@@ -110,25 +139,25 @@ describe State do
         allow(state).to receive(:gets).and_return("b7 to d7")
       end
 
-      it "changes the starting space" do
+      xit "changes the starting space" do
         original_contents = state.board[2][7]
-        expect {state.move(player)}.to change {state.board[2][7]}.from(original_contents).to(" ")
+        expect {state.move(w_player)}.to change {state.board[2][7]}.from(original_contents).to(" ")
       end
 
-      it "changes the destination space" do
+      xit "changes the destination space" do
         original_contents = state.board[4][7]
         new_contents = state.board[2][7]
-        expect {state.move(player)}.to change {state.board[4][7]}.from(original_contents).to(new_contents)
+        expect {state.move(w_player)}.to change {state.board[4][7]}.from(original_contents).to(new_contents)
       end
       
-      it "pushes start and destination to move_list" do
-        state.move(player)
+      xit "pushes start and destination to move_list" do
+        state.move(w_player)
         last_move = state.instance_variable_get(:@move_list).last
         move = [[2, 7], [4, 7]]
         expect(last_move).to eq(move)
       end
 
-      it "doesn't display any errors" do
+      xit "doesn't display any errors" do
         boundary_error = "**Your coordinates are out of bounds**"
         friendly_error = "**You can't take your own piece!**"
         check_error = "**You can't move your king into check**"
@@ -137,10 +166,6 @@ describe State do
         expect(state).not_to receive(:puts).with(check_error)
       end
     end
-  end
-
-  describe "#checkmate?" do
-    
   end
 
   describe "#save" do

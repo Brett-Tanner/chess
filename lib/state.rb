@@ -23,13 +23,13 @@ class State
   end
 
   def create_board
-    black_back_row = ["H", Rook.new("black"), Knight.new("black"), Bishop.new("black"), King.new("black"), Queen.new("black"), Bishop.new("black"), Knight.new("black"), Rook.new("black")]
+    black_back_row = ["H", Rook.new("Black"), Knight.new("Black"), Bishop.new("Black"), Queen.new("Black"), King.new("Black"), Bishop.new("Black"), Knight.new("Black"), Rook.new("Black")]
 
-    black_front_row = Array.new(8, Pawn.new("black")).unshift("G")
-    white_front_row = Array.new(8, Pawn.new("white")).unshift("B")
+    black_front_row = Array.new(8, Pawn.new("Black")).unshift("G")
+    white_front_row = Array.new(8, Pawn.new("White")).unshift("B")
 
 
-    white_back_row = ["A", Rook.new("white"), Knight.new("white"), Bishop.new("white"), King.new("white"), Queen.new("white"), Bishop.new("white"), Knight.new("white"), Rook.new("white")]
+    white_back_row = ["A", Rook.new("White"), Knight.new("White"), Bishop.new("White"), Queen.new("White"), King.new("White"), Bishop.new("White"), Knight.new("White"), Rook.new("White")]
 
 
     board = Hash.new
@@ -89,28 +89,24 @@ class State
 
   def move(player)
     move = move_input(player)
-
     start = move[0]
     dest = move[1]
 
     player_piece = @board[start[0]][start[1]]
+    if player_piece.class == String
+      puts "You just tried to move an empty space?"
+      return move(player)
+    end
     target = @board[dest[0]][dest[1]]
 
-    return move(player) if friendly_fire?(player_piece, target)
-
-    # TODO:
-    # check?(player_piece, target)
-    # check for path being blocked unless it's a knight
-    # check for check, even if piece isn't king you need to know if it'll be in check
-      # So put it as a State method and call it for every move
-    # player_piece.legal?(start, dest, board) TODO: make this the last check so the pawn can safely prune its moves if it returns true
+    return move(player) if friendly_fire?(player_piece, target) || check?(start, dest, player)
+    return move(player) unless player_piece.legal?(start, dest, @board) && player_piece.clear_path?(start, dest, @board)
 
     make_move(start, dest)
-
     @move_list << [start, dest]
   end
 
-  def checkmate?
+  def checkmate? # TODO:
     
   end
 
@@ -152,15 +148,45 @@ class State
     true
   end
 
-  def check? # TODO:
-    puts "**You can't move your king into check**"
+  def check?(start, dest, player)
+    # make the desired move on a duplicate board
+    board_copy = Hash.new
+    @board.each {|k, v| board_copy[k] = v.dup}
+    moved_piece = board_copy[start[0]][start[1]]
+    target = board_copy[dest[0]][dest[1]]
+    board_copy[dest[0]][dest[1]] = moved_piece
+    board_copy[start[0]][start[1]] = " "
+
+    # find the king
+    king = []
+    board_copy.each do |row_index, row|
+      next if row_index == :col_nums
+      row.each_index do |col_index|
+        space = board_copy[row_index][col_index]
+        next if space.class == String
+        king = [row_index, col_index] if space.class == King && space.color == player.color
+      end
+    end
+    king_row = king[0]
+    king_col = king[1]
+
+    # check if the king can be taken by any piece on that duplicate board
+    board_copy.each do |row_index, row|
+      row.each_index do |col_index|
+        piece = board_copy[row_index][col_index]
+        next if piece.class == String || piece.class == Integer || piece.color == player.color
+        
+        takes_king = piece.legal?([row_index, col_index], [king[0], king[1]], board_copy, "n")
+        if takes_king
+          puts "**You can't move your king into check**"
+          return true
+        end
+      end
+    end
+    false
   end
 
-  def blocked?
-    
-  end
-
-  def promote(piece)
+  def promote(piece) # TODO:
     
   end
 
@@ -194,3 +220,6 @@ class State
     20
   end
 end
+
+# test = State.new
+# test.check?([2, 4], [4, 4], Human.new("brett", "white"))
