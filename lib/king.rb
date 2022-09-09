@@ -10,6 +10,10 @@ class King < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
+  def clear_path?
+    true
+  end
+
   private
   
   def create_list

@@ -79,8 +79,4 @@ describe King do
       end
     end
   end
-
-  describe "#clear_path?" do
-    
-  end
 end
