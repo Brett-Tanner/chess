@@ -4,9 +4,9 @@ class Piece
 
   attr_accessor :symbol, :color
   
-  def legal?(start, dest, board)
+  def legal?(start, dest, board, display = "y")
     return true if @legal_moves[start].include?(dest)
-    puts "A #{self.class} can't move like that!"
+    puts "A #{self.class} can't move like that!" if display == "y"
     false
   end
 

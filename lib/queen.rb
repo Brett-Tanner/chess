@@ -4,8 +4,8 @@ require './lib/piece.rb'
 
 class Queen < Piece
   def initialize(color)
-    @symbol = "♕" if color == "white"
-    @symbol = "♛" if color == "black"
+    @symbol = "♕" if color == "White"
+    @symbol = "♛" if color == "Black"
     @color = color
     @legal_moves = POSSIBLE_MOVES.dup
   end

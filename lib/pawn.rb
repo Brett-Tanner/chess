@@ -4,12 +4,12 @@ require './lib/piece.rb'
 
 class Pawn < Piece
   def initialize(color)
-    @symbol = "♙" if color == "white"
-    @symbol = "♟" if color == "black"
+    @symbol = "♙" if color == "White"
+    @symbol = "♟" if color == "Black"
     @color = color
   end
 
-  def legal?(start, dest, board)
+  def legal?(start, dest, board, display = "y")
     s_row = start[0] 
     d_row = dest[0]
     s_col = start[1]
@@ -18,7 +18,7 @@ class Pawn < Piece
     return true if standard_move?(s_row, s_col, d_row, d_col) || opening_move?(s_row, s_col, d_row, d_col)
     # check if there's an enemy piece to take, otherwise return false
     return true if valid_diag?(s_row, s_col, d_row, d_col, board)
-    puts "**A pawn can't move like that!**"
+    puts "A pawn can't move like that!" if display == "y"
     false
   end
 
@@ -45,18 +45,18 @@ class Pawn < Piece
   private
 
   def standard_move?(s_row, s_col, d_row, d_col)
-    (d_row == s_row + 1 && d_col == s_col && @color == "white") || (d_row == s_row - 1 && d_col == s_col && @color == "black") 
+    (d_row == s_row + 1 && d_col == s_col && @color == "White") || (d_row == s_row - 1 && d_col == s_col && @color == "Black") 
   end
 
   def opening_move?(s_row, s_col, d_row, d_col)
     white_start = 2
     black_start = 7
-    (s_row == white_start && d_row == white_start + 2 && s_col == d_col && @color == "white") || (s_row == black_start && d_row == black_start - 2 && s_col == d_col && @color == "black")
+    (s_row == white_start && d_row == white_start + 2 && s_col == d_col && @color == "White") || (s_row == black_start && d_row == black_start - 2 && s_col == d_col && @color == "Black")
   end
 
   def valid_diag?(s_row, s_col, d_row, d_col, board)
-    valid_squares = [[s_row + 1, s_col + 1], [s_row + 1, s_col - 1]] if @color == "white"
-    valid_squares = [[s_row - 1, s_col + 1], [s_row - 1, s_col - 1]] if @color == "black"
+    valid_squares = [[s_row + 1, s_col + 1], [s_row + 1, s_col - 1]] if @color == "White"
+    valid_squares = [[s_row - 1, s_col + 1], [s_row - 1, s_col - 1]] if @color == "Black"
     return false unless valid_squares.include?([d_row, d_col])
     return false if board[d_row][d_col] == " " || board[d_row][d_col].color == @color
     return true
