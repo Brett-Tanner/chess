@@ -10,7 +10,7 @@ class King < Piece
     @legal_moves = POSSIBLE_MOVES.dup
   end
 
-  def clear_path?
+  def clear_path?(start, dest, board)
     true
   end
 
