@@ -11,36 +11,56 @@ class Piece
   end
 
   def clear_path?(start, dest, board)
-    # find difference between start and dest
-    
-    # use them to make the path the piece would take
     path = find_path(start, dest)
-    # check path for obstructions (by checking the class of the squares)
-      # remember to exclude the destination itself from the path, it can be occupied
-    p path
-
-    # if at least one path is all empty squares, return true
-
-    # if both paths have at least one piece in the way, displays an error and returns false
-    puts "You can't move there, your path is blocked!"
+    # if path is empty, or no spaces between start and dest return true
+    return true if path.empty?
+    return true if path.all? {|space| board[space[0]][space[1]] == " "}
+    # if path has at least one piece in the way, displays an error and returns false
+    puts "There's a piece blocking your #{self.class}!"
     false
   end
 
   private
 
-  def find_path(start, dest)
-    row_diff = start[0] - dest[0]
-    col_diff = start[1] - dest[1]
+  def find_path(start, dest) # nested ifs deal with pos/neg change
+    row_diff = dest[0] - start[0]
+    col_diff = dest[1] - start[1]
     path = []
-   if row_diff != 0 && col_diff == 0 # vertical movement
-    (1...row_diff).each {|i| path << [start[0] + i, start[1]]}
-   elsif row_diff == 0 && col_diff != 0 # horizontal movement
-    (1...col_diff).each {|i| path << [start[0], start[1] + i]}
-   elsif row_diff == col_diff # diagonal movement
-    (1...row_diff).each {|i| path << [start[0] + i, start[1] + i]}
-   else
-    puts "**Well this is unexpected**"
-   end
-   path
+
+    if row_diff != 0 && col_diff == 0 # vertical movement
+      if row_diff > 0
+        first_move = 1
+        (first_move...row_diff).each {|i| path << [start[0] + i, start[1]]}
+      end
+      if row_diff < 0
+        first_move = -1
+        row_diff += 1 # to prevent the target space being checked
+        (row_diff..first_move).each {|i| path << [start[0] + i, start[1]]}
+      end
+    elsif row_diff == 0 && col_diff != 0 # horizontal movement
+      if col_diff > 0
+        first_move = 1
+        (first_move...col_diff).each {|i| path << [start[0], start[1] + i]}
+      end
+      if col_diff < 0
+        first_move = -1
+        col_diff += 1 # to prevent the target space being checked
+        (col_diff..first_move).each {|i| path << [start[0], start[1] + i]}
+      end
+    elsif row_diff == col_diff # diagonal movement
+      if row_diff > 0
+        first_move = 1
+        (first_move...row_diff).each {|i| path << [start[0] + i, start[1] + i]}
+      end
+      if row_diff < 0
+        first_move = -1
+        row_diff += 1 # to prevent the target space being checked
+        (row_diff..first_move).each {|i| path << [start[0] + i, start[1] + i]}
+      end
+    else
+     puts "**Well this is unexpected**"
+    end
+
+    path
   end
 end

@@ -64,7 +64,7 @@ describe Bishop do
   describe "#clear_path?" do
     let(:board) {
       board = Hash.new
-      8.times {|i| board[8 - i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+      (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
       board[4][3] = double('white_piece', color: "white")
       board[3][3] = double('white_piece', color: "white")
       board[5][3] = double('white_piece', color: "white")
@@ -75,6 +75,13 @@ describe Bishop do
     context "when the path is clear" do
       it "moves diagonally" do
         start = [4, 4]
+        dest = [7, 7]
+        clear_path = bishop.clear_path?(start, dest, board)
+        expect(clear_path).to be true
+      end
+
+      it "can take a piece next to it" do
+        start = [4, 4]
         dest = [3, 3]
         clear_path = bishop.clear_path?(start, dest, board)
         expect(clear_path).to be true
@@ -84,7 +91,7 @@ describe Bishop do
     context "when the path isn't clear" do
       it "doesn't move diagonally" do
         start = [4, 4]
-        dest = [5, 5]
+        dest = [1, 1]
         clear_path = bishop.clear_path?(start, dest, board)
         expect(clear_path).to be false
       end
