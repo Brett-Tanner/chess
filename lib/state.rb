@@ -175,7 +175,7 @@ class State
         piece = board_copy[row_index][col_index]
         next if piece.class == String || piece.class == Integer || piece.color == player.color
         
-        takes_king = piece.legal?([row_index, col_index], [king[0], king[1]], board_copy, "n")
+        takes_king = piece.legal?([row_index, col_index], [king_row, king_col], board_copy, "n")
         if takes_king
           puts "**You can't move your king into check**"
           return true

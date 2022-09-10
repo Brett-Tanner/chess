@@ -7,6 +7,9 @@ require './lib/pawn.rb'
 
 describe State do
   subject(:state) {described_class.new}
+  subject(:king) {King.new("White")}
+  subject(:queen) {Queen.new("Black")}
+  subject(:pawn) {Pawn.new("White")}
 
   before do
     allow(state).to receive(:puts)
@@ -63,31 +66,34 @@ describe State do
     end
 
     context "When the space is occupied by friendly piece" do
-      let(:occupied_space) {
-        double('occupied', class: "Rook", color: "White", invalid_move?: false)
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = king
+        board[5][5] = pawn
+        board[8][8] = queen
+        board
       }
-      let(:unoccupied_space) {
-        double('unoccupied', class: "Rook", color: "Black", invalid_move?: false)
-      }
-
-      subject(:occupied_state) do 
-        described_class.new(Array.new(8, Array.new(9, occupied_space)).push(Array.new(9, unoccupied_space)))
-      end
 
       before do
-        allow(occupied_state).to receive(:gets).and_return("a1 to a8", "a1 to h8")
+        state.board = board
+        allow(state).to receive(:gets).and_return("d4 to e5", "d4 to e4")
       end
       
-      xit "displays an error" do
+      it "displays an error" do
         error = "**You can't take your own piece!**"
-        expect(occupied_state).to receive(:puts).with(error).once
-        occupied_state.move(w_player)
+        expect(state).to receive(:puts).with(error).once
+        state.move(w_player)
       end
 
-      xit "asks for new inputs" do
+      it "asks for new inputs" do
         message = "Brett, what's your move?"
-        expect(occupied_state).to receive(:puts).with(message).twice
-        occupied_state.move(w_player)
+        expect(state).to receive(:puts).with(message).twice
+        state.move(w_player)
+      end
+
+      after :each do
+        state.board = state.create_board
       end
     end
 
@@ -95,9 +101,9 @@ describe State do
       let(:board) {
         board = Hash.new
         (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
-        board[4][4] = King.new("White")
-        board[5][5] = Pawn.new("White")
-        board[8][8] = Queen.new("Black")
+        board[4][4] = king
+        board[5][5] = pawn
+        board[8][8] = queen
         board
       }
 
@@ -108,7 +114,7 @@ describe State do
 
       it "displays an error" do
         error = "**You can't move your king into check**"
-        expect(state).to receive(:puts).with(error)
+        expect(state).to receive(:puts).with(error).once
         state.move(w_player)
       end
 
@@ -124,32 +130,68 @@ describe State do
     end
 
     context "When the piece can't move like that" do
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = king
+        board[5][5] = pawn
+        board[8][8] = queen
+        board
+      }
 
       before do
-        
+        state.board = board
+        allow(state).to receive(:gets).and_return("d4 to g5", "d4 to e4")
+        allow(king).to receive(:puts)
       end
 
-      xit "displays an error" do
-        
+      it "displays an error" do
+        error = "A King can't move like that!"
+        expect(king).to receive(:puts).with(error).once
+        state.move(w_player)
       end
 
-      xit "asks for new inputs" do
-        
+      it "asks for new inputs" do
+        message = "Brett, what's your move?"
+        expect(state).to receive(:puts).with(message).twice
+        state.move(w_player)
+      end
+
+      after :each do
+        state.board = state.create_board
       end
     end
 
     context "When there are other pieces blocking the path" do
-      
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = king
+        board[5][5] = pawn
+        board[8][8] = queen
+        board
+      }
+
       before do
-        
+        state.board = board
+        allow(state).to receive(:gets).and_return("h8 to d4", "h8 to e5")
+        allow(queen).to receive(:puts)
       end
 
-      xit "displays an error" do
-        
+      it "displays an error" do
+        error = "There's a piece blocking your Queen!"
+        expect(queen).to receive(:puts).with(error).once
+        state.move(b_player)
       end
 
-      xit "asks for new inputs" do
-        
+      it "asks for new inputs" do
+        message = "Viktoria, what's your move?"
+        expect(state).to receive(:puts).with(message).twice
+        state.move(b_player)
+      end
+
+      after :each do
+        state.board = state.create_board
       end
     end
 
@@ -159,25 +201,25 @@ describe State do
         allow(state).to receive(:gets).and_return("b7 to d7")
       end
 
-      xit "changes the starting space" do
+      it "changes the starting space" do
         original_contents = state.board[2][7]
         expect {state.move(w_player)}.to change {state.board[2][7]}.from(original_contents).to(" ")
       end
 
-      xit "changes the destination space" do
+      it "changes the destination space" do
         original_contents = state.board[4][7]
         new_contents = state.board[2][7]
         expect {state.move(w_player)}.to change {state.board[4][7]}.from(original_contents).to(new_contents)
       end
       
-      xit "pushes start and destination to move_list" do
+      it "pushes start and destination to move_list" do
         state.move(w_player)
         last_move = state.instance_variable_get(:@move_list).last
         move = [[2, 7], [4, 7]]
         expect(last_move).to eq(move)
       end
 
-      xit "doesn't display any errors" do
+      it "doesn't display any errors" do
         boundary_error = "**Your coordinates are out of bounds**"
         friendly_error = "**You can't take your own piece!**"
         check_error = "**You can't move your king into check**"
