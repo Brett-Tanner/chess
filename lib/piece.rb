@@ -2,7 +2,7 @@
 
 class Piece
 
-  attr_accessor :symbol, :color
+  attr_accessor :symbol, :color, :legal_moves
   
   def legal?(start, dest, board, display = "y")
     return true if @legal_moves[start].include?(dest)

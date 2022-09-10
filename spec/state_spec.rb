@@ -11,6 +11,9 @@ describe State do
   subject(:queen) {Queen.new("Black")}
   subject(:pawn) {Pawn.new("White")}
 
+  let(:w_player) {double('player', name: "Brett", color: "White")}
+  let(:b_player) {double('b_player', name: "Viktoria", color: "Black")}
+
   before do
     allow(state).to receive(:puts)
     allow(state).to receive(:print)
@@ -43,8 +46,6 @@ describe State do
   end
 
   describe "#move" do
-    let(:w_player) {double('player', name: "Brett", color: "White")}
-    let(:b_player) {double('b_player', name: "Viktoria", color: "Black")}
 
     context "When input is out of bounds" do
 
@@ -226,6 +227,70 @@ describe State do
         expect(state).not_to receive(:puts).with(boundary_error)
         expect(state).not_to receive(:puts).with(friendly_error)
         expect(state).not_to receive(:puts).with(check_error)
+      end
+    end
+
+    context "When a Pawn makes it to the other side" do
+      xit "is offered a promotion" do
+        
+      end
+
+      xit "changes to the chosen piece" do
+        
+      end
+    end
+  end
+
+  describe "#checkmate?" do
+    context "When it's checkmate" do
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = king
+        board[5][5] = queen
+        board[4][5] = queen
+        board[3][5] = queen
+        board[3][4] = queen
+        board[3][3] = queen
+        board[4][3] = queen
+        board[5][3] = queen
+        board[5][4] = queen
+        board
+      }
+
+      before do
+        state.board = board
+      end
+
+      it "returns true" do
+        checkmate = state.checkmate?(w_player)
+        expect(checkmate).to be true
+      end
+
+      after do
+        state.board = state.create_board
+      end
+    end
+
+    context "When it's not checkmate" do
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = king
+        board
+      }
+
+      before do
+        state.board = board
+      end
+
+      it "returns false" do
+        checkmate = state.checkmate?(w_player)
+        expect(checkmate).to be false
+      end
+
+      after do
+        state.board = state.create_board
       end
     end
   end

@@ -16,9 +16,9 @@ class Game
     
     winner = loop do
       state.move(state.white_player)
-      break state.black_player.name if state.checkmate?
+      break state.white_player.name if state.checkmate?(state.black_player)
       state.move(state.black_player)
-      break state.white_player.name if state.checkmate?
+      break state.black_player.name if state.checkmate?(state.white_player)
     end
     
     end_game(winner)

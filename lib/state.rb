@@ -98,15 +98,26 @@ class State
     end
     target = @board[dest[0]][dest[1]]
 
-    return move(player) if friendly_fire?(player_piece, target) || check?(start, dest, player)
-    return move(player) unless player_piece.legal?(start, dest, @board) && player_piece.clear_path?(start, dest, @board)
+    return move(player) unless valid_move?(player_piece, target, start, dest, player)
 
     make_move(start, dest)
     @move_list << [start, dest]
   end
 
-  def checkmate? # TODO:
+  def checkmate?(player)
+    king_coord = find_king(@board, player)
+    king_row = king_coord[0]
+    king_col = king_coord[1]
+    king = @board[king_row][king_col]
+    possible_moves = king.legal_moves[king_coord]
     
+    return false if possible_moves.any? do |target_coord| 
+      target_col = target_coord[0]
+      target_row = target_coord[1]
+      target = @board[target_row][target_col]
+      valid_move?(king, target, king_coord, target_coord, player)
+    end
+    true
   end
 
   def save
@@ -122,6 +133,12 @@ class State
   end
 
   private
+
+  def valid_move?(player_piece, target, start, dest, player)
+    return false if friendly_fire?(player_piece, target) || check?(start, dest, player)
+    return false unless player_piece.legal?(start, dest, @board) && player_piece.clear_path?(start, dest, @board)
+    true
+  end
 
   def move_input(player)
     puts "#{player.name}, what's your move?"
@@ -148,24 +165,17 @@ class State
   end
 
   def check?(start, dest, player)
-    # make the desired move on a duplicate board
+    # create duplicate board
     board_copy = Hash.new
     @board.each {|k, v| board_copy[k] = v.dup}
+
+    # make the desired move on that baord
     moved_piece = board_copy[start[0]][start[1]]
     target = board_copy[dest[0]][dest[1]]
     board_copy[dest[0]][dest[1]] = moved_piece
     board_copy[start[0]][start[1]] = " "
 
-    # find the king
-    king = []
-    board_copy.each do |row_index, row|
-      next if row_index == :col_nums
-      row.each_index do |col_index|
-        space = board_copy[row_index][col_index]
-        next if space.class == String
-        king = [row_index, col_index] if space.class == King && space.color == player.color
-      end
-    end
+    king = find_king(board_copy, player)
     king_row = king[0]
     king_col = king[1]
 
@@ -183,6 +193,19 @@ class State
       end
     end
     false
+  end
+
+  def find_king(board, player)
+    king = []
+    board.each do |row_index, row|
+      next if row_index == :col_nums
+      row.each_index do |col_index|
+        space = board[row_index][col_index]
+        next if space.class == String
+        king = [row_index, col_index] if space.class == King && space.color == player.color
+      end
+    end
+    king
   end
 
   def promote(piece) # TODO:
