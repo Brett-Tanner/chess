@@ -91,7 +91,6 @@ class State
     move = move_input(player)
     start = move[0]
     dest = move[1]
-
     player_piece = @board[start[0]][start[1]]
     if player_piece.class == String
       puts "You just tried to move an empty space?"

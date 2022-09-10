@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require './lib/state.rb'
+require './lib/king.rb'
+require './lib/queen.rb'
+require './lib/pawn.rb'
 
 describe State do
   subject(:state) {described_class.new}
@@ -89,17 +92,34 @@ describe State do
     end
 
     context "When the player's King is in check" do
-      
+      let(:board) {
+        board = Hash.new
+        (1..8).each {|i| board[i] = [" ", " ", " ", " ", " ", " ", " ", " "]}
+        board[4][4] = King.new("White")
+        board[5][5] = Pawn.new("White")
+        board[8][8] = Queen.new("Black")
+        board
+      }
+
       before do
-        
+        state.board = board
+        allow(state).to receive(:gets).and_return("e5 to f5", "d4 to e4")
       end
 
-      xit "displays an error" do
-        
+      it "displays an error" do
+        error = "**You can't move your king into check**"
+        expect(state).to receive(:puts).with(error)
+        state.move(w_player)
       end
 
-      xit "asks for new inputs" do
-        
+      it "asks for new inputs" do
+        message = "Brett, what's your move?"
+        expect(state).to receive(:puts).with(message).twice
+        state.move(w_player)
+      end
+
+      after :each do
+        state.board = state.create_board
       end
     end
 
