@@ -5,20 +5,39 @@ require 'yaml'
 
 class Game
 
+  @current_player = nil
+
   def play
     state = from_yaml()
+
+    if @current_player == "Black"
+      winner = loop do
+        state.move(state.black_player)
+        break state.black_player.name if state.checkmate?(state.white_player)state.move(state.white_player)
+        break state.white_player.name if state.checkmate?(state.black_player)
+      end
+    end
+
+    if @current_player == "White"
+      winner = loop do
+        state.move(state.white_player)
+        break state.white_player.name if state.checkmate?(state.black_player)
+        state.move(state.black_player)
+        break state.black_player.name if state.checkmate?(state.white_player)
+      end
+    end
 
     if state == nil
       state = State.new
       state.create_player("White")
       state.create_player("Black")
-    end
     
-    winner = loop do
-      state.move(state.white_player)
-      break state.white_player.name if state.checkmate?(state.black_player)
-      state.move(state.black_player)
-      break state.black_player.name if state.checkmate?(state.white_player)
+      winner = loop do
+        state.move(state.white_player)
+        break state.white_player.name if state.checkmate?(state.black_player)
+        state.move(state.black_player)
+        break state.black_player.name if state.checkmate?(state.white_player)
+      end
     end
     
     end_game(winner)
@@ -64,6 +83,7 @@ class Game
     list = saved_state[:move_list]
     white = saved_state[:white_player]
     black = saved_state[:black_player]
+    @current_player = saved_state[:current_player]
 
     File.delete(save_path) unless save_path.include?("test")
     State.new(board, list, white, black)
