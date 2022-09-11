@@ -126,7 +126,7 @@ class State
   def save(player)
     filename = "./data/#{@white_player.name}_vs_#{@black_player.name}.yaml"
     save_state = YAML.dump ({
-      :current_player = player.color,
+      :current_player => player.color,
       :board => @board,
       :move_list => @move_list,
       :white_player => @white_player,

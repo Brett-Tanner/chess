@@ -13,7 +13,8 @@ class Game
     if @current_player == "Black"
       winner = loop do
         state.move(state.black_player)
-        break state.black_player.name if state.checkmate?(state.white_player)state.move(state.white_player)
+        break state.black_player.name if state.checkmate?(state.white_player)
+        state.move(state.white_player)
         break state.white_player.name if state.checkmate?(state.black_player)
       end
     end
@@ -77,7 +78,11 @@ class Game
   end
 
   def create_state(save_path)
-    saved_state = YAML.load_file(save_path)
+    saved_state = YAML.load_file(
+      save_path, 
+      permitted_classes: [Bishop, Computer, Human, King, Knight, Pawn, Piece, Queen, Rook, State, Symbol],
+      aliases: true
+    )
 
     board = saved_state[:board]
     list = saved_state[:move_list]
