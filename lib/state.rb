@@ -148,7 +148,6 @@ class State
   def move_input(player)
     puts "#{player.name}, what's your move?"
     input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
-    p input
     return save() if input == ["SAVE"]
 
     # convert rows from letters to row index
