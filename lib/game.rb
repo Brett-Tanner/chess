@@ -69,3 +69,6 @@ class Game
     State.new(board, list, white, black)
   end
 end
+
+game = Game.new
+game.play

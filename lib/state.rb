@@ -88,6 +88,7 @@ class State
   end
 
   def move(player)
+    print_board()
     move = move_input(player)
     start = move[0]
     dest = move[1]
@@ -99,11 +100,11 @@ class State
     target = @board[dest[0]][dest[1]]
 
     return move(player) unless valid_move?(player_piece, target, start, dest, player)
+    return move(player) if check?(start, dest, player)
 
     make_move(start, dest)
     @move_list << [start, dest]
     promote(dest, player_piece) if promoted?(dest, player_piece)
-    print_board()
   end
 
   def checkmate?(player)
@@ -132,12 +133,14 @@ class State
     })
     save_file = File.open(filename, "w")
     save_file.puts "#{save_state}"
+    puts "Game saved successfully!" if File.exist?(filename)
+    exit(0)
   end
 
   private
 
   def valid_move?(player_piece, target, start, dest, player)
-    return false if friendly_fire?(player_piece, target) || check?(start, dest, player)
+    return false if friendly_fire?(player_piece, target)
     return false unless player_piece.legal?(start, dest, @board) && player_piece.clear_path?(start, dest, @board)
     true
   end
@@ -145,6 +148,8 @@ class State
   def move_input(player)
     puts "#{player.name}, what's your move?"
     input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
+    p input
+    return save() if input == ["SAVE"]
 
     # convert rows from letters to row index
     start = [to_row(input[0][0]), input[0][1].to_i]
@@ -269,6 +274,3 @@ class State
     20
   end
 end
-
-# test = State.new
-# test.check?([2, 4], [4, 4], Human.new("brett", "white"))
