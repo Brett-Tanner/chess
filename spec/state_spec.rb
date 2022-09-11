@@ -231,12 +231,32 @@ describe State do
     end
 
     context "When a Pawn makes it to the other side" do
-      xit "is offered a promotion" do
-        
+
+      before do
+        state.board[7][7] = Pawn.new("White")
+        allow(state).to receive(:gets).and_return("g7 to h8", "Queen")
       end
 
-      xit "changes to the chosen piece" do
-        
+      it "is offered a promotion" do
+        message = "What should your pawn be promoted to?"
+        expect(state).to receive(:puts).with(message).once
+        state.move(w_player)
+      end
+
+      it "changes to the chosen piece" do
+        state.move(w_player)
+        promoted_piece = state.board[8][8].class
+        expect(promoted_piece).to eq(Queen)
+      end
+
+      it "creates a piece of the player's color" do
+        state.move(w_player)
+        color = state.board[8][8].color
+        expect(color).to eql("White")
+      end
+
+      after :each do
+        state.board = state.create_board
       end
     end
   end

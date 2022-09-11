@@ -102,6 +102,8 @@ class State
 
     make_move(start, dest)
     @move_list << [start, dest]
+    promote(dest, player_piece) if promoted?(dest, player_piece)
+    print_board()
   end
 
   def checkmate?(player)
@@ -208,8 +210,33 @@ class State
     king
   end
 
-  def promote(piece) # TODO:
-    
+  def promoted?(piece_coords, piece)
+    color = piece.color
+    row = piece_coords[0]
+    return true if (color == "White" && row == 8) || (color == "Black" && row == 1)
+    false
+  end
+
+  def promote(piece_coords, piece)
+    puts "What should your pawn be promoted to?"
+    new_piece = gets.chomp.capitalize
+    row = piece_coords[0]
+    col = piece_coords[1]
+    color = piece.color
+
+    case new_piece
+    when "Rook"
+      @board[row][col] = Rook.new("#{color}")
+    when "Knight"
+      @board[row][col] = Knight.new("#{color}")
+    when "Bishop"
+      @board[row][col] = Bishop.new("#{color}")
+    when "Queen"
+      @board[row][col] = Queen.new("#{color}")
+    else
+      puts "That's not a valid piece!"
+      return promote(piece_coords, piece)
+    end
   end
 
   def make_move(start, dest)
