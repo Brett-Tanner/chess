@@ -123,9 +123,10 @@ class State
     true
   end
 
-  def save
+  def save(player)
     filename = "./data/#{@white_player.name}_vs_#{@black_player.name}.yaml"
     save_state = YAML.dump ({
+      :current_player = player.color,
       :board => @board,
       :move_list => @move_list,
       :white_player => @white_player,
@@ -148,7 +149,7 @@ class State
   def move_input(player)
     puts "#{player.name}, what's your move?"
     input = gets.chomp.split("to").map {|coord| coord.strip.upcase}
-    return save() if input == ["SAVE"]
+    return save(player) if input == ["SAVE"]
 
     # convert rows from letters to row index
     start = [to_row(input[0][0]), input[0][1].to_i]
