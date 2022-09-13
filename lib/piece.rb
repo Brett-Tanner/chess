@@ -22,30 +22,26 @@ class Piece
 
   private
 
-  def find_path(start, dest) # nested ifs deal with pos/neg change
+  def find_path(start, dest)
     row_diff = dest[0] - start[0]
     col_diff = dest[1] - start[1]
     path = []
 
     if row_diff != 0 && col_diff == 0 # vertical movement
-      if row_diff > 0
-        first_move = 1
-        (first_move...row_diff).each {|i| path << [start[0] + i, start[1]]}
-      end
-      if row_diff < 0
-        first_move = -1
-        row_diff += 1 # to prevent the target space being checked
-        (row_diff..first_move).each {|i| path << [start[0] + i, start[1]]}
+      row_diff.abs.times do |i|
+        space = [start[0] + row_diff, start[1] + col_diff]
+        row_diff -= 1 if row_diff > 0
+        row_diff += 1 if row_diff < 0
+        next if space == dest || space == start
+        path << space
       end
     elsif row_diff == 0 && col_diff != 0 # horizontal movement
-      if col_diff > 0
-        first_move = 1
-        (first_move...col_diff).each {|i| path << [start[0], start[1] + i]}
-      end
-      if col_diff < 0
-        first_move = -1
-        col_diff += 1 # to prevent the target space being checked
-        (col_diff..first_move).each {|i| path << [start[0], start[1] + i]}
+      col_diff.abs.times do |i|
+        space = [start[0], start[1] + col_diff]
+        col_diff -= 1 if col_diff > 0
+        col_diff += 1 if col_diff < 0
+        next if space == dest || space == start
+        path << space
       end
     elsif row_diff.abs == col_diff.abs # diagonal movement
       row_diff.abs.times do |i|
@@ -58,7 +54,7 @@ class Piece
         path << space
       end
     else
-     puts "**Well this is unexpected**"
+      puts "**Well this is unexpected**"
     end
 
     path
