@@ -138,6 +138,26 @@ class State
     exit(0)
   end
 
+  def replay
+    # reset the board, then print it
+    @board = create_board()
+    puts "Replay start!"
+    print_board()
+    # for each move in move list, call #make_move, then print the result and a text summary
+    @move_list.each do |move|
+      start = move[0]
+      player_piece = @board[start[0]][start[1]]
+      dest = move[1]
+      target = @board[dest[0]][dest[1]]
+      puts "#{player_piece.color} #{player_piece.class} moved from #{to_letter(start[0])}#{start[1]} to #{to_letter(dest[0])}#{dest[1]}"
+      puts "No piece was taken" if target == " "
+      puts "#{target.color} #{target.class} was taken" unless target == " "
+      make_move(start, dest)
+      print_board()
+      sleep(1.5)
+    end
+  end
+
   private
 
   def valid_move?(player_piece, target, start, dest, player)
@@ -272,5 +292,10 @@ class State
     rel_array = %w[nil A B C D E F G H]
     return rel_array.index(letter) if rel_array.include?(letter)
     20
+  end
+
+  def to_letter(row)
+    rel_array = %w[nil A B C D E F G H]
+    return rel_array[row]    
   end
 end

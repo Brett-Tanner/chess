@@ -10,6 +10,12 @@ class Game
   def play
     state = from_yaml()
 
+    unless state == nil
+      puts "Do you want to watch a replay?"
+      ans = gets.chomp.downcase
+      state.replay if ans == "y"
+    end
+
     if @current_player == "Black"
       winner = loop do
         state.move(state.black_player)
